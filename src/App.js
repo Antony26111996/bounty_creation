@@ -1,24 +1,34 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { BountyProvider } from './context/BountyContext';
+import BountyForm from './pages/BountyForm';
+import ConfirmationPage from './pages/ConfirmationPage';
+import ResultPage from './pages/ResultPage';
 import './App.css';
 
 function App() {
+  const [stage, setStage] = useState('form'); // form, confirmation, result
+
+  const handleFormComplete = () => {
+    setStage('confirmation');
+  };
+
+  const handleConfirmationComplete = () => {
+    setStage('result');
+  };
+
+  const handleReset = () => {
+    setStage('form');
+    window.location.reload();
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BountyProvider>
+      <div className="App">
+        {stage === 'form' && <BountyForm onComplete={handleFormComplete} />}
+        {stage === 'confirmation' && <ConfirmationPage onComplete={handleConfirmationComplete} />}
+        {stage === 'result' && <ResultPage onReset={handleReset} />}
+      </div>
+    </BountyProvider>
   );
 }
 

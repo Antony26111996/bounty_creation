@@ -1,70 +1,198 @@
-# Getting Started with Create React App
+# Bounty Creation Platform 🎯
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A stunning, modern multi-step form application for creating bounties with advanced validation, state management, and beautiful responsive design.
 
-## Available Scripts
+## ✨ Features
 
-In the project directory, you can run:
+- **3-Step Form Wizard**: Streamlined process (Brief → Rewards → Backer)
+- **Modern UI/UX**: Beautiful gradients, animations, and smooth transitions
+- **Real-time Validation**: Field-level validation with clear, helpful error messages
+- **State Persistence**: Form data seamlessly persists across all steps
+- **Fully Responsive**: Mobile-first design that looks stunning on all devices
+- **Dynamic Fields**: Smart conditional fields based on user selections
+- **Interactive Map Selector**: Beautiful map interface for physical bounty locations
+- **File Upload**: Drag-and-drop logo upload with live preview
+- **Interactive Elements**: Animated buttons, toggles, and step indicators
+- **Beautiful Results**: Stunning JSON payload display with one-click copy
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- React 19.2.0
+- React Context API for state management
+- Custom reusable components
+- CSS3 with modern layouts, gradients, and animations
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+```bash
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Running the Application
 
-### `npm run build`
+```bash
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The application will open at [http://localhost:3000](http://localhost:3000)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Project Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+├── components/         # Reusable UI components
+│   ├── Button.js
+│   ├── Input.js
+│   ├── Textarea.js
+│   ├── Dropdown.js
+│   ├── Toggle.js
+│   ├── RadioGroup.js
+│   ├── FileUpload.js
+│   ├── MapSelector.js   # Interactive map component
+│   ├── Sidebar.js
+│   └── StepIndicator.js
+├── context/           # State management
+│   └── BountyContext.js
+├── steps/             # Form step components
+│   ├── Step1Brief.js
+│   ├── Step2Rewards.js
+│   └── Step3Backer.js
+├── pages/             # Page components
+│   ├── BountyForm.js
+│   ├── ConfirmationPage.js
+│   └── ResultPage.js
+├── App.js            # Main application
+└── index.js          # Entry point
+```
 
-### `npm run eject`
+## Form Steps
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Step 1: Brief (Basic Details)
+- Bounty Title (required, max 40 chars)
+- Bounty Description (required, max 1000 chars)
+- Project Selection (required)
+- Bounty Type (required): Content, Design, Development, Marketing, Other
+- Dominant Impact Core (required): Water, Earth, Social, Energy
+- Bounty Mode: Digital or Physical
+  - Physical bounties include interactive map selector for precise location
+  - Location input with coordinates (latitude/longitude)
+  - OpenStreetMap integration for visual location selection
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Step 2: Rewards & Timeline
+- Currency Selection: USD, EUR, INR, GBP
+- Reward Amount (required, > 0)
+- Number of Winners (required, >= 1)
+- Expiration Date (required)
+- Estimated Completion Time (Days, Hours, Minutes)
+- Impact Certificate (optional with brief message)
+- SDGs Selection (multi-select, up to 4)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Step 3: Backer Information
+- Has Backer Toggle
+- Backer Name (required if has backer)
+- Backer Logo Upload (required if has backer)
+- Backer Message (optional)
+- Terms & Conditions Acceptance (required)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Validation Rules
 
-## Learn More
+- All required fields must be filled
+- Title: 1-40 characters
+- Amount: Must be greater than 0
+- Winners: Must be at least 1
+- Location: Required for physical bounties
+- Impact Brief: Required if Impact Certificate is enabled
+- Backer details: Required if Has Backer is enabled
+- Terms: Must be accepted before submission
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Navigation
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Sidebar**: Click on any completed step to navigate
+- **Back Button**: Navigate to previous step
+- **Next Button**: Validate and proceed to next step
+- **Create Bounty Button**: Submit form (Step 3)
 
-### Code Splitting
+## Payload Format
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The application generates a comprehensive JSON payload:
 
-### Analyzing the Bundle Size
+```json
+{
+  "title": "Bounty Title",
+  "description": "Description...",
+  "projectTitle": "Project Name",
+  "type": "development",
+  "dominant_core": "social",
+  "mode": "digital",
+  "location": "Only if physical",
+  "coordinates": {
+    "lat": 19.0760,
+    "lng": 72.8777
+  },
+  "reward": {
+    "currency": "USD",
+    "amount": 500,
+    "winners": 1
+  },
+  "timeline": {
+    "expiration_date": "2023-12-31T23:59:59.000Z",
+    "estimated_completion": {
+      "days": 2,
+      "hours": 4,
+      "minutes": 0
+    }
+  },
+  "hasImpactCertificate": true,
+  "impactBriefMessage": "Message if applicable",
+  "sdgs": ["no_poverty", "quality_education"],
+  "has_backer": true,
+  "backer": {
+    "name": "Sponsor Name",
+    "logo": "base64 or URL",
+    "message": "Optional message"
+  },
+  "terms_accepted": true
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🎨 UI Features
 
-### Making a Progressive Web App
+✅ **Gradient Backgrounds**: Beautiful purple-to-pink gradients
+✅ **Smooth Animations**: Fade-ins, slide-ups, and hover effects
+✅ **Modern Cards**: Elevated cards with shadows and rounded corners
+✅ **Interactive Components**: Buttons with ripple effects and icons
+✅ **3-Step Indicator**: Visual progress with animated checkmarks
+✅ **Sidebar Navigation**: Elegant step tracking with active states
+✅ **Form Animations**: Smooth transitions between steps
+✅ **Loading States**: Beautiful spinner with pulsing animation
+✅ **Success Celebration**: Animated success icon with ripple effect
+✅ **Responsive Layout**: Adapts beautifully to mobile, tablet, and desktop
+✅ **Modern Color Palette**: Professional blue/purple theme
+✅ **Typography**: Clean, readable fonts with proper hierarchy
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## ⚙️ Technical Features
 
-### Advanced Configuration
+✅ Multi-step form with 3 steps (not 6)
+✅ Reusable component library (10 components including MapSelector)
+✅ Context-based state management
+✅ Comprehensive field-level validation
+✅ Smart conditional rendering
+✅ File upload with live preview
+✅ Sidebar navigation with completion tracking
+✅ Top progress indicator showing current step
+✅ Loading page with progress bar
+✅ Result page with formatted JSON display
+✅ Copy to clipboard functionality
+✅ Mobile-responsive design
+✅ Modern UI exceeding Figma expectations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Browser Support
 
-### Deployment
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## License
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
